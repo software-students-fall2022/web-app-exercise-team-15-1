@@ -14,3 +14,13 @@ See instructions. Delete this line and place a link to the user stories here.
 ## Task boards
 
 See instructions. Delete this line and place a link to the task boards here.
+
+
+## Commands for mac
+- note: before you run the command, supply the <passowrd> in .env with your actual password
+- python3 -m venv .venv
+- source .venv/bin/activate
+- pip3 install -r requirements.txt
+- export FLASK_APP=app.py
+- export FLASK_ENV=development
+- python3 -m flask run --host=0.0.0.0 --port=10000
