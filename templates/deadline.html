@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h2>Upcoming Deadlines</h2>
+
+<section class="add-edit">
+    <a href="{{ url_for('add_deadline')}}">  
+        <div class="button"> Add  </div>
+    </a>
+
+    <a href="{{ url_for('show_todo')}}">  
+        <div class="button"> Edit  </div>
+    </a>
+</section>
+<section class="deadlineDisplay">
+    {% for doc in docs %}
+    <article class="deadline">
+        <div class="content countdown">
+            <p>
+                <span class="countdown-num"> {{doc.countdown}} </span>
+                <br>days left
+            </p>
+        </div>
+        <div class="content">
+            <p>
+                <span class="title"> {{doc.title}} </span><br>
+                <span class="time"> Deadline: {{doc.due}} </span><br>
+                <span class="priority"> Priority level: {{doc.priority}} </span>
+            </p>
+        </div>
+    </article>
+    {%endfor%}
+
+</section>
+
+{% endblock %}

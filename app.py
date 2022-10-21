@@ -34,94 +34,47 @@ except Exception as e:
     print(' *', "Failed to connect to MongoDB at", config['MONGO_URI'])
     print('Database connection error:', e) # debug
 
+
+userId = "6351acad640dc9083d534403"
+
 # set up the routes
+@app.route('/deadline')
+def show_deadline():
+    today = datetime.datetime.today()
+    docs = db.deadline.find({"user": ObjectId(userId), "due":{"$gt":today}}).sort("due", -1) # sort in descending order of created_at timestamp
+    deadline = list(docs)
+    for i in deadline:
+        i["countdown"] = i["due"] - today
+        i["countdown"] = i["countdown"].days
+    return render_template('deadline.html', docs=deadline) # render the hone template
 
-# route for the home page
-@app.route('/')
-def home():
-    """
-    Route for the home page
-    """
-    docs = db.exampleapp.find({}).sort("created_at", -1) # sort in descending order of created_at timestamp
-    return render_template('index.html', docs=docs) # render the hone template
+@app.route('/deadline/add')
+def add_deadline():
+    print(datetime.datetime.today())
+    return render_template('add_deadline.html', today=datetime.datetime.today()) # render the hone template
 
-# route to accept form submission and create a new post
-@app.route('/create', methods=['POST'])
-def create_post():
-    """
-    Route for POST requests to the create page.
-    Accepts the form submission data for a new document and saves the document to the database.
-    """
-    name = request.form['fname']
-    message = request.form['fmessage']
-
-
-    # create a new document with the data the user entered
+@app.route('/deadline/add', methods=['POST'])
+def submit_deadline():
+    title = request.form['dtitle']
+    due = request.form['dtime'].replace('T', '-').replace(':', '-').split('-')
+    due = [int(v) for v in due];
+    priority = request.form['dPriority']
     doc = {
-        "name": name,
-        "message": message, 
-        "created_at": datetime.datetime.utcnow()
+        "title": title, 
+        "due": datetime.datetime(*due),
+        "priority": priority,
+        "user": ObjectId(userId)
     }
-    db.exampleapp.insert_one(doc) # insert a new document
+    db.deadline.insert_one(doc)
+    return redirect(url_for('show_deadline'))
 
-    return redirect(url_for('home')) # tell the browser to make a request for the / route (the home function)
+@app.route('/account')
+def show_account():
+    return render_template('todo.html') 
 
-
-# route to view the edit form for an existing post
-@app.route('/edit/<mongoid>')
-def edit(mongoid):
-    """
-    Route for GET requests to the edit page.
-    Displays a form users can fill out to edit an existing record.
-    """
-    doc = db.exampleapp.find_one({"_id": ObjectId(mongoid)})
-    return render_template('edit.html', mongoid=mongoid, doc=doc) # render the edit template
-
-
-# route to accept the form submission to delete an existing post
-@app.route('/edit/<mongoid>', methods=['POST'])
-def edit_post(mongoid):
-    """
-    Route for POST requests to the edit page.
-    Accepts the form submission data for the specified document and updates the document in the database.
-    """
-    name = request.form['fname']
-    message = request.form['fmessage']
-
-    doc = {
-        # "_id": ObjectId(mongoid), 
-        "name": name, 
-        "message": message, 
-        "created_at": datetime.datetime.utcnow()
-    }
-
-    db.exampleapp.update_one(
-        {"_id": ObjectId(mongoid)}, # match criteria
-        { "$set": doc }
-    )
-
-    return redirect(url_for('home')) # tell the browser to make a request for the / route (the home function)
-
-# route to delete a specific post
-@app.route('/delete/<mongoid>')
-def delete(mongoid):
-    """
-    Route for GET requests to the delete page.
-    Deletes the specified record from the database, and then redirects the browser to the home page.
-    """
-    db.exampleapp.delete_one({"_id": ObjectId(mongoid)})
-    return redirect(url_for('home')) # tell the web browser to make a request for the / route (the home function)
-
-
-# route to handle any errors
-@app.errorhandler(Exception)
-def handle_error(e):
-    """
-    Output any errors - good for debugging.
-    """
-    return render_template('error.html', error=e) # render the edit template
-
-
+@app.route('/todo')
+def show_todo():
+    return render_template('account.html') 
 # run the app
 if __name__ == "__main__":
     #import logging
