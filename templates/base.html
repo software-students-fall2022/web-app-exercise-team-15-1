@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To Do Manager</title>
+    <link rel = "stylesheet" type ="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <link rel = "stylesheet" type ="text/css"href="{{ url_for('static', filename='css/deadline.css') }}"/>
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+  </head>
+  <body>
+    <div class="container">
+    <main>{% block container %} {% endblock %}</main>
+      <footer>
+        <nav>
+          <a href="{{ url_for('show_todo')}}" class="direct">Todos</a>
+          <a href="{{ url_for('show_deadline')}}" class="direct">Deadlines</a>
+          <a href="{{ url_for('show_account')}}" class="direct">Account</a>
+        </nav>
+      </footer>
+    </div>
+  </body>
+</html>

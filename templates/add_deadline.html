@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h2>Add a Deadline</h2>
+
+<form method="POST" action="{{ url_for('submit_deadline') }}">
+    <div class="input-deadline">
+        <div class="each-input">
+        <p>Event Name</p>
+        <input type="text" id="dtitle" name="dtitle" />
+         </div>
+
+         <div class="each-input">
+        <p>Deadline</p>
+        <input type="datetime-local" id="dtime" name="dtime" value={{today}} min={{today}} >
+    </div>
+        <div class="each-input">
+        <p>Priority Level</p>
+        <select name="dPriority" id="dPriority">
+            <option value="low">Low</option>
+            <option value="median">Median</option>
+            <option value="high">High</option>
+        </select>
+    </div>
+    </div>
+
+    <section class="add-edit">
+        <a href="{{ url_for('show_deadline')}}">  
+            <div class="button"> Cancel  </div>
+        </a>
+        <div class="button">
+            <input type="submit" name="post-btn" value="Add" />
+        </div>
+    </section>
+</form>  
+
+
+{% endblock %}
