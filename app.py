@@ -41,7 +41,7 @@ userId = "6351acad640dc9083d534403"
 @app.route('/deadline')
 def show_deadline():
     today = datetime.datetime.today()
-    docs = db.deadline.find({"user": ObjectId(userId), "due":{"$gt":today}}).sort("due", -1) # sort in descending order of created_at timestamp
+    docs = db.deadline.find({"user": ObjectId(userId), "due":{"$gt":today}}).sort("due", 1) # sort in descending order of created_at timestamp
     deadline = list(docs)
     for i in deadline:
         i["countdown"] = i["due"] - today
