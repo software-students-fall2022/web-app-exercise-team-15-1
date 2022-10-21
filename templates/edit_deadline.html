@@ -5,22 +5,23 @@
 <h2>Upcoming Deadlines</h2>
 
 <section class="add-edit">
-    <a href="{{ url_for('edit_deadline')}}">  
-        <div class="button"> Edit  </div>
+    <a href="{{ url_for('show_deadline')}}">  
+        <div class="button"> Back  </div>
     </a>
     <a href="{{ url_for('add_deadline')}}">  
         <div class="button"> Add  </div>
     </a>
-
 </section>
 <section class="deadlineDisplay">
     {% for doc in docs %}
     <article class="deadline">
-        <div class="content countdown">
-            <p>
-                <span class="countdown-num"> {{doc.countdown}} </span>
-                <br>days left
-            </p>
+        <div class="content">
+            <a href="{{ url_for('delete_deadline', mongoid=doc._id)}}">  
+                <div class="button-edit"> Delete  </div>
+            </a>
+            <a href="{{ url_for('rewrite_deadline', mongoid=doc._id)}}">  
+                <div class="button-edit"> Edit  </div>
+            </a>
         </div>
         <div class="content">
             <p>

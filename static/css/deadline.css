@@ -16,6 +16,10 @@ article.deadline {
     padding-right: 10px;
 }
 
+.content > * {
+    text-decoration: none;
+}
+
 .countdown {
     border: 2px solid;
     border-radius: 30px;
@@ -57,6 +61,21 @@ article.deadline {
     border: none;
     cursor: pointer;
     font-size: 16px;
+}
+
+.button-edit {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px solid black;
+    border-radius: 20px;
+    text-align: center;
+    padding: 10px;
+    width: 50px;
+    height: 13px;
+    color: black;
+    font-size: 13px;
+    background-color: #d8dce4;
+    text-decoration: none;
 }
 
 .input-deadline {

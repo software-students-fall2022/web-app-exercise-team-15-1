@@ -38,26 +38,27 @@ except Exception as e:
 userId = "6351acad640dc9083d534403"
 
 # set up the routes
-@app.route('/deadline')
+@app.route('/deadline') # show deadlines
 def show_deadline():
-    today = datetime.datetime.today()
-    docs = db.deadline.find({"user": ObjectId(userId), "due":{"$gt":today}}).sort("due", 1) # sort in descending order of created_at timestamp
+    today = datetime.datetime.today() - datetime.timedelta(days = 1)
+    docs = db.deadline.find({"user": ObjectId(userId), "due":{"$gte":today}}).sort("due", 1) # sort in descending order of created_at timestamp
     deadline = list(docs)
     for i in deadline:
         i["countdown"] = i["due"] - today
         i["countdown"] = i["countdown"].days
-    return render_template('deadline.html', docs=deadline) # render the hone template
+    return render_template('deadline.html', docs=deadline) 
 
-@app.route('/deadline/add')
+@app.route('/deadline/add') # add deadlines
 def add_deadline():
-    print(datetime.datetime.today())
-    return render_template('add_deadline.html', today=datetime.datetime.today()) # render the hone template
+    today = str(datetime.datetime.today())
+    today= today[:10]+"T"+today[11:16]
+    return render_template('add_deadline.html', today=today) # render the hone template
 
-@app.route('/deadline/add', methods=['POST'])
+@app.route('/deadline/add', methods=['POST'])# add deadlines confirm with post request
 def submit_deadline():
     title = request.form['dtitle']
     due = request.form['dtime'].replace('T', '-').replace(':', '-').split('-')
-    due = [int(v) for v in due];
+    due = [int(v) for v in due]
     priority = request.form['dPriority']
     doc = {
         "title": title, 
@@ -68,13 +69,55 @@ def submit_deadline():
     db.deadline.insert_one(doc)
     return redirect(url_for('show_deadline'))
 
+@app.route('/deadline/edit') # edit deadlines page
+def edit_deadline():
+    today = datetime.datetime.today() - datetime.timedelta(days = 1)
+    docs = db.deadline.find({"user": ObjectId(userId), "due":{"$gte":today}}).sort("due", 1) # sort in descending order of created_at timestamp
+    deadline = list(docs)
+    for i in deadline:
+        i["countdown"] = i["due"] - today
+        i["countdown"] = i["countdown"].days
+    return render_template('edit_deadline.html', docs=deadline) 
+
+@app.route('/deadline/delete/<mongoid>')
+def delete_deadline(mongoid):
+    db.deadline.delete_one({"_id": ObjectId(mongoid)})
+    return redirect(url_for('edit_deadline')) # tell the web browser to make a request for the / route (the home function)
+
+@app.route('/deadline/edit/<mongoid>')
+def rewrite_deadline(mongoid):
+    doc = db.deadline.find_one({"_id": ObjectId(mongoid)})
+    time = str(doc["due"])
+    time= time[:10]+"T"+time[11:16]
+    today = str(datetime.datetime.today())
+    today= today[:10]+"T"+today[11:16]
+    return render_template('rewrite_deadline.html', doc=doc, time=time, today=today)
+
+@app.route('/deadline/edit/<mongoid>', methods=['POST'])# add deadlines confirm with post request
+def submit_edit_deadline(mongoid):
+    title = request.form['dtitle']
+    due = request.form['dtime'].replace('T', '-').replace(':', '-').split('-')
+    due = [int(v) for v in due]
+    priority = request.form['dPriority']
+    doc = {
+        "title": title, 
+        "due": datetime.datetime(*due),
+        "priority": priority,
+        "user": ObjectId(userId)
+    }
+    db.deadline.update_one(
+        {"_id": ObjectId(mongoid)}, # match criteria
+        { "$set": doc }
+    )
+    return redirect(url_for('edit_deadline'))
+
 @app.route('/account')
 def show_account():
-    return render_template('todo.html') 
+    return render_template('base.html') 
 
 @app.route('/todo')
 def show_todo():
-    return render_template('account.html') 
+    return render_template('base.html') 
 # run the app
 if __name__ == "__main__":
     #import logging
