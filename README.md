@@ -5,7 +5,7 @@ A little exercise to build a web application following an agile development proc
 
 ## Product vision statement
 
-See instructions. Delete this line and place the Product Vision Statement here.
+Help users keep track of the tasks they wish to complete and organize by deadlines.
 
 ## User stories
 
@@ -24,3 +24,5 @@ See instructions. Delete this line and place a link to the task boards here.
 - export FLASK_APP=app.py
 - export FLASK_ENV=development
 - python3 -m flask run --host=0.0.0.0 --port=10000
+
+Figma Design Link here: https://www.figma.com/file/4a1U4bGAHSfHgR5emHC6ZC/Deadline?node-id=0%3A1
