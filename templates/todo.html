@@ -16,13 +16,12 @@
 <section class="todoDisplay">
     {% for doc in docs %}
     <article class = "task">
-        <!-- when I put "form method" and "action" here, it wont work-->
-            <input type ="checkbox" class="checkbox-round" id = "dchecked" name = "dchecked">
-            </input> <!--circle that will change colors when clicked-->
-        
+        <a href="{{ url_for('complete_task', mongoid=doc._id)}}">
+            <div class="checkbox-round circle{{doc.completed}}"> </div>
+        </a>        
             <article class="content2">
                 <p>
-                    <span class="title2"> {{doc.title}} </span><br>
+                    <span class="title2  title{{doc.completed}}"> {{doc.title}} </span><br>
                 </p>
             </article>
     </article>

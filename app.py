@@ -122,7 +122,13 @@ def show_todo():
     docs = db.todo.find({"user": ObjectId(userId)})
     todo = list(docs)
     return render_template('todo.html', docs = todo)
-    #return render_template('base.html') 
+    
+@app.route('/todo/complete/<mongoid>') #set checked tasks to completed in database
+def complete_task(mongoid):
+    doc = db.todo.find_one({"_id": ObjectId(mongoid)})
+    status = not doc["completed"]
+    db.todo.update({"_id": ObjectId(mongoid)},{"$set": {"completed": status}})
+    return redirect(url_for('show_todo'))
 
 @app.route('/todo/edit') #edit to-do list
 def edit_task():
@@ -135,18 +141,6 @@ def edit_task():
 def delete_task(mongoid):
     db.todo.delete_one({"_id": ObjectId(mongoid)})
     return redirect(url_for('edit_task'))
-
-#Leah: I keep getting an error here. The main error is in the todo.html file
-@app.route('/todo/complete/<mongoid>',  methods=['POST']) #set checked tasks to completed in database
-def complete_task(mongoid):
-    checkedID = request.form["dchecked"]
-    if checkedID.checked == True:
-        #I'm trying to set "completed" to true when the checkbox is checked
-        # but i get an error when i put this line:
-        #<form method="POST" action="{{ url_for('complete_task') }}"></form>
-        #in my todo.html file
-        db.todo.update({"_id": ObjectId(mongoid)},{"$set": {"completed": "true"}})
-    return redirect(url_for('show_todo'))
 
 @app.route('/todo/edit/<mongoid>')    
 def rewrite_task(mongoid):
