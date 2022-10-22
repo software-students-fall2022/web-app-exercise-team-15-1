@@ -1,0 +1,36 @@
+* {
+  font-family: 'Inter';
+  background-color: #f0f4f4;
+}
+
+.container{
+  text-align: center;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  gap: 10em; /* space between elements in the row */
+  justify-content: space-between; /* align along the flex direction */
+  align-items: center; /* align across the flex direction */
+}
+
+footer, main {
+  padding: 2rem;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+
+main {
+  margin-bottom: 5px;
+}
+
+.direct {
+    margin-left: 30px;
+    margin-right: 30px;
+}

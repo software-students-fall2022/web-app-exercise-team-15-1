@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h2>Upcoming Deadlines</h2>
+
+<section class="add-edit">
+    <a href="{{ url_for('show_deadline')}}">  
+        <div class="button"> Back  </div>
+    </a>
+    <a href="{{ url_for('add_deadline')}}">  
+        <div class="button"> Add  </div>
+    </a>
+</section>
+<section class="deadlineDisplay">
+    {% for doc in docs %}
+    <article class="deadline">
+        <div class="content">
+            <a href="{{ url_for('delete_deadline', mongoid=doc._id)}}">  
+                <div class="button-edit"> Delete  </div>
+            </a>
+            <a href="{{ url_for('rewrite_deadline', mongoid=doc._id)}}">  
+                <div class="button-edit"> Edit  </div>
+            </a>
+        </div>
+        <div class="content">
+            <p>
+                <span class="title"> {{doc.title}} </span><br>
+                <span class="time"> Deadline: {{doc.due}} </span><br>
+                <span class="priority"> Priority level: {{doc.priority}} </span>
+            </p>
+        </div>
+    </article>
+    {%endfor%}
+
+</section>
+
+{% endblock %}
