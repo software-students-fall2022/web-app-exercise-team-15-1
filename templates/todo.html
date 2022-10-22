@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+
+<h2>To-do List</h2>
+<section class="add-edit">
+    <a href="{{ url_for('edit_task')}}">  
+        <div class="button2"> Edit  </div>
+    </a>
+    <a href="{{ url_for('add_task')}}">  
+        <div class="button2"> Add  </div>
+    </a>
+
+</section>
+<section class="todoDisplay">
+    {% for doc in docs %}
+    <article class = "task">
+        <!-- when I put "form method" and "action" here, it wont work-->
+            <input type ="checkbox" class="checkbox-round" id = "dchecked" name = "dchecked">
+            </input> <!--circle that will change colors when clicked-->
+        
+            <article class="content2">
+                <p>
+                    <span class="title2"> {{doc.title}} </span><br>
+                </p>
+            </article>
+    </article>
+    {%endfor%}
+</section>  
+
+{% endblock %}

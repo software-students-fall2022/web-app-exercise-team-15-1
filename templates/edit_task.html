@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h2>Edit a Task</h2>
+<section class="add-edit">
+    <a href="{{ url_for('show_todo')}}">  
+        <div class="button"> Back  </div>
+    </a>
+    <a href="{{ url_for('add_task')}}">  
+        <div class="button"> Add  </div>
+    </a>
+</section>
+
+<section class="taskDisplay">
+    {% for doc in docs %}
+    <article class="task">
+        <div class="content">
+            <a href="{{ url_for('delete_task', mongoid=doc._id)}}">  
+                <div class="button-edit"> Delete  </div>
+            </a>
+            <a href="{{ url_for('rewrite_task', mongoid=doc._id)}}">  
+                <div class="button-edit"> Edit  </div>
+            </a>
+        </div>
+        <div class="content2">
+            <p>
+                <span class="title2"> {{doc.title}} </span><br>
+            </p>
+        </div>
+    </article>
+    {%endfor%}
+
+</section>
+{% endblock %}
