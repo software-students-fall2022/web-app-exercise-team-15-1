@@ -38,6 +38,7 @@ except Exception as e:
 userId = "6351acad640dc9083d534403"
 
 # set up the routes
+
 @app.route('/deadline') # show deadlines
 def show_deadline():
     today = datetime.datetime.today() - datetime.timedelta(days = 1)
@@ -115,9 +116,43 @@ def submit_edit_deadline(mongoid):
 def show_account():
     return render_template('base.html') 
 
-@app.route('/todo')
+#TO-DO Functions
+@app.route('/todo') #show to-do list
 def show_todo():
-    return render_template('base.html') 
+    docs = db.todo.find({"user": ObjectId(userId)})
+    todo = list(docs)
+    return render_template('todo.html', docs = todo)
+    
+@app.route('/todo/complete/<mongoid>') #set checked tasks to completed in database
+def complete_task(mongoid):
+    doc = db.todo.find_one({"_id": ObjectId(mongoid)})
+    status = not doc["completed"]
+    db.todo.update({"_id": ObjectId(mongoid)},{"$set": {"completed": status}})
+    return redirect(url_for('show_todo'))
+
+@app.route('/todo/edit') #edit to-do list
+def edit_task():
+    docs = db.todo.find({"user": ObjectId(userId)})
+    todo = list(docs)
+    date = "today"
+    return render_template('edit_task.html', docs = todo)
+
+@app.route('/todo/delete/<mongoid>')
+def delete_task(mongoid):
+    db.todo.delete_one({"_id": ObjectId(mongoid)})
+    return redirect(url_for('edit_task'))
+
+@app.route('/todo/edit/<mongoid>')    
+def rewrite_task(mongoid):
+    date = "today"
+    return render_template('edit_task.html', date = date)
+
+
+@app.route('/todo/add') # add deadlines
+def add_task():
+    date = "today"
+    return render_template('add_task.html', date = date)
+
 # run the app
 if __name__ == "__main__":
     #import logging
