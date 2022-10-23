@@ -4,4 +4,47 @@
 
 <h2>Add a Task</h2>
 
+<form method="POST" action="{{ url_for('add_task') }}">
+    <div class="input-task">
+        <div class="each-input">
+        <p>Task Name</p>
+        <input type="text" id="ttitle" name="ttitle" />
+         </div>
+
+         <div class="each-input">
+        <p>Assigned Task Priority Level</p>
+        <select name="tPriority" id="tPriority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+    </div>
+    <div class = "input-task">
+        <div class="each-input">
+            <p>Task Description</p>
+            <input type="text" id="tdesc" name="tdesc" />
+            </div>
+
+
+    </div>
+
+    <div class = "input-task">
+        <div class="each-input">
+            <p>Task Label</p>
+            <input type="text" id="tlabel" name="tlabel" />
+            </div>
+
+    </div>
+    </div>
+
+    <section class="add-edit">
+        <a href="{{ url_for('show_todo')}}">  
+            <div class="button"> Cancel  </div>
+        </a>
+        <div class="button">
+            <input type="submit" name="post-btn" value="Add" />
+        </div>
+    </section>
+</form>  
+
 {% endblock %}

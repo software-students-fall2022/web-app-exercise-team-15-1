@@ -148,9 +148,27 @@ def rewrite_task(mongoid):
     return render_template('edit_task.html', date = date)
 
 
-@app.route('/todo/add') # add deadlines
+@app.route('/todo/add') #add task screen w/o Post method
+def add_task_home():
+    today = str(datetime.datetime.today())
+    today= today[:10]+"T"+today[11:16]
+    return render_template('add_task.html', today=today) # render the hone template
+
+@app.route('/todo/add', methods=['POST']) # add task
 def add_task():
     date = "today"
+    title = request.form['ttitle']
+    priority = request.form['tPriority']
+    description = request.form['tdesc']
+    label = request.form['tlabel']
+    newdoc = {
+        "title": title,
+        "priority": priority,
+        "description": description,
+        "label": label,
+        "user": ObjectId(userId)
+    }
+    db.todo.insert_one(newdoc)
     return render_template('add_task.html', date = date)
 
 # run the app
