@@ -160,6 +160,7 @@ def editing_existing_task(mongoid):
         "priority": priority,
         "description": description,
         "label": label,
+        "completed": False,
         "user": ObjectId(userId)
     }
     db.todo.update_one(
@@ -186,6 +187,7 @@ def add_task():
         "priority": priority,
         "description": description,
         "label": label,
+        "completed": False,
         "user": ObjectId(userId)
     }
     db.todo.insert_one(newdoc)
