@@ -130,23 +130,43 @@ def complete_task(mongoid):
     db.todo.update({"_id": ObjectId(mongoid)},{"$set": {"completed": status}})
     return redirect(url_for('show_todo'))
 
-@app.route('/todo/edit') #edit to-do list
-def edit_task():
-    docs = db.todo.find({"user": ObjectId(userId)})
-    todo = list(docs)
-    date = "today"
-    return render_template('edit_task.html', docs = todo)
-
 @app.route('/todo/delete/<mongoid>')
 def delete_task(mongoid):
     db.todo.delete_one({"_id": ObjectId(mongoid)})
-    return redirect(url_for('edit_task'))
+    return redirect(url_for('edit_todo'))
+
+@app.route('/todo/edit')
+def edit_todo():
+    date = "today"
+    doc_list = db.todo.find({"user": ObjectId(userId)})
+    tasks = list(doc_list)
+    return render_template('edit_task.html', docs=tasks)
 
 @app.route('/todo/edit/<mongoid>')    
 def rewrite_task(mongoid):
     date = "today"
-    return render_template('edit_task.html', date = date)
+    doc = db.todo.find_one({"_id":ObjectId(mongoid)})
+    return render_template('rewrite_todo.html',doc = doc, date = date)
 
+@app.route('/todo/edit/<mongoid>', methods=['POST']) #post request method
+def editing_existing_task(mongoid):
+    date = "today"
+    title = request.form['ttitle']
+    priority = request.form['tPriority']
+    description = request.form['tdesc']
+    label = request.form['tlabel']
+    newdoc = {
+        "title": title,
+        "priority": priority,
+        "description": description,
+        "label": label,
+        "user": ObjectId(userId)
+    }
+    db.todo.update_one(
+        {"_id": ObjectId(mongoid)},
+        { "$set": newdoc}
+    )
+    return redirect(url_for('edit_todo'))
 
 @app.route('/todo/add') #add task screen w/o Post method
 def add_task_home():
@@ -169,7 +189,7 @@ def add_task():
         "user": ObjectId(userId)
     }
     db.todo.insert_one(newdoc)
-    return render_template('add_task.html', date = date)
+    return redirect(url_for('show_todo'))
 
 # run the app
 if __name__ == "__main__":
