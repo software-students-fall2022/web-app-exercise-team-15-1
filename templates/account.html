@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block container %}
+
+<h2>Account</h2>
+<p1>You are logged in as: {{doc.email}}</p1>
+<a href="{{ url_for('logout')}}">  
+    <div class="button"> Signout  </div>
+</a>
+
+{% endblock %}
