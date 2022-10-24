@@ -85,11 +85,14 @@ def inject_user():
 userId = "6351acad640dc9083d534403"
 
 # set up the routes
+@app.route('/') # show deadlines
+def home():
+    return redirect(url_for('show_deadline'))
 
 @app.route('/deadline') # show deadlines
 def show_deadline():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     today = datetime.datetime.today() - datetime.timedelta(days = 1)
     docs = db.deadline.find({"user": ObjectId(flask_login.current_user.data['_id']), "due":{"$gte":today}}).sort("due", 1) # sort in descending order of created_at timestamp
     deadline = list(docs)
@@ -101,7 +104,7 @@ def show_deadline():
 @app.route('/deadline/add') # add deadlines
 def add_deadline():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     today = str(datetime.datetime.today())
     today= today[:10]+"T"+today[11:16]
     return render_template('add_deadline.html', today=today) # render the hone template
@@ -109,7 +112,7 @@ def add_deadline():
 @app.route('/deadline/add', methods=['POST'])# add deadlines confirm with post request
 def submit_deadline():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     title = request.form['dtitle']
     due = request.form['dtime'].replace('T', '-').replace(':', '-').split('-')
     due = [int(v) for v in due]
@@ -126,7 +129,7 @@ def submit_deadline():
 @app.route('/deadline/edit') # edit deadlines page
 def edit_deadline():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     today = datetime.datetime.today() - datetime.timedelta(days = 1)
     docs = db.deadline.find({"user": ObjectId(flask_login.current_user.data['_id']), "due":{"$gte":today}}).sort("due", 1) # sort in descending order of created_at timestamp
     deadline = list(docs)
@@ -138,14 +141,14 @@ def edit_deadline():
 @app.route('/deadline/delete/<mongoid>')
 def delete_deadline(mongoid):
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     db.deadline.delete_one({"_id": ObjectId(mongoid)})
     return redirect(url_for('edit_deadline')) # tell the web browser to make a request for the / route (the home function)
 
 @app.route('/deadline/edit/<mongoid>')
 def rewrite_deadline(mongoid):
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     doc = db.deadline.find_one({"_id": ObjectId(mongoid)})
     time = str(doc["due"])
     time= time[:10]+"T"+time[11:16]
@@ -156,7 +159,7 @@ def rewrite_deadline(mongoid):
 @app.route('/deadline/edit/<mongoid>', methods=['POST'])# add deadlines confirm with post request
 def submit_edit_deadline(mongoid):
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     title = request.form['dtitle']
     due = request.form['dtime'].replace('T', '-').replace(':', '-').split('-')
     due = [int(v) for v in due]
@@ -175,12 +178,14 @@ def submit_edit_deadline(mongoid):
 
 @app.route('/deadline/search')  #base for deadline searches
 def search_deadline():
-
+    if not flask_login.current_user.is_authenticated:
+        return redirect(url_for('login'))
     return render_template('search_deadline.html')
 
 @app.route('/deadline/search', methods=['POST'])    #search for deadline with input
 def searching_deadline():
-
+    if not flask_login.current_user.is_authenticated:
+        return redirect(url_for('login'))
     querytitle = request.form['dquery']
     docs = db.deadline.find({
         "title": querytitle
@@ -192,7 +197,7 @@ def searching_deadline():
 @app.route('/account')
 def show_account():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     return render_template('account.html', doc=flask_login.current_user.data)
 
     # return render_template('account.html',author="asdf", docs="asdf")
@@ -258,7 +263,7 @@ def login_submit():
 @app.route('/todo') #show to-do list
 def show_todo():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     docs = db.todo.find({"user": ObjectId(flask_login.current_user.data['_id'])})
     todo = list(docs)
     return render_template('todo.html', docs = todo)
@@ -266,7 +271,7 @@ def show_todo():
 @app.route('/todo/complete/<mongoid>') #set checked tasks to completed in database
 def complete_task(mongoid):
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     doc = db.todo.find_one({"_id": ObjectId(mongoid)})
     status = not doc["completed"]
     db.todo.update({"_id": ObjectId(mongoid)},{"$set": {"completed": status}})
@@ -275,14 +280,14 @@ def complete_task(mongoid):
 @app.route('/todo/delete/<mongoid>')
 def delete_task(mongoid):
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     db.todo.delete_one({"_id": ObjectId(mongoid)})
     return redirect(url_for('edit_todo'))
 
 @app.route('/todo/edit')
 def edit_todo():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     doc_list = db.todo.find({"user": ObjectId(flask_login.current_user.data['_id'])})
     tasks = list(doc_list)
     return render_template('edit_task.html', docs=tasks)
@@ -290,7 +295,7 @@ def edit_todo():
 @app.route('/todo/edit/<mongoid>')    
 def rewrite_task(mongoid):
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     date = "today"
     doc = db.todo.find_one({"_id":ObjectId(mongoid)})
     return render_template('rewrite_todo.html',doc = doc, date = date)
@@ -298,7 +303,7 @@ def rewrite_task(mongoid):
 @app.route('/todo/edit/<mongoid>', methods=['POST']) #post request method
 def editing_existing_task(mongoid):
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     date = "today"
     title = request.form['ttitle']
     priority = request.form['tPriority']
@@ -321,7 +326,7 @@ def editing_existing_task(mongoid):
 @app.route('/todo/add') #add task screen w/o Post method
 def add_task_home():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     today = str(datetime.datetime.today())
     today= today[:10]+"T"+today[11:16]
     return render_template('add_task.html', today=today) # render the hone template
@@ -329,7 +334,7 @@ def add_task_home():
 @app.route('/todo/add', methods=['POST']) # add task
 def add_task():
     if not flask_login.current_user.is_authenticated:
-        return render_template('login.html')
+        return redirect(url_for('login'))
     date = "today"
     title = request.form['ttitle']
     priority = request.form['tPriority']
@@ -348,12 +353,14 @@ def add_task():
 
 @app.route('/todo/search')   # search for task
 def search_task():
-
+    if not flask_login.current_user.is_authenticated:
+        return redirect(url_for('login'))
     return render_template('search_todo.html')
 
 @app.route('/todo/search', methods=['POST'])    #search for task with input
 def searching_task():
-
+    if not flask_login.current_user.is_authenticated:
+        return redirect(url_for('login'))
     querytitle = request.form['tquery']
     docs = db.todo.find({
         "title": querytitle
