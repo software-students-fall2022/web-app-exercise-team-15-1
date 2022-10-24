@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h2>Search for Deadline Name</h2>
+
+<form method="POST" action="{{ url_for('search_deadline')}}">
+    <div class="input-deadline">
+        <div class="each-input">
+            <p>Event Name Query</p>
+            <input type="text" id="dquery" name="dquery" />
+        </div>
+    </div>
+
+    <section class="search">
+    <a href="{{ url_for('show_deadline')}}">
+        <div class="button"> Cancel </div>
+    </a>
+        <div class="button">
+            <input type="submit" name="search-btn" value="Search" />
+        </div>
+    </section>
+</form>
+
+{% endblock %}

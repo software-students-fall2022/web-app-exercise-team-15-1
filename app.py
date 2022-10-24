@@ -173,7 +173,22 @@ def submit_edit_deadline(mongoid):
     )
     return redirect(url_for('edit_deadline'))
 
-# route to show account profile
+@app.route('/deadline/search')  #base for deadline searches
+def search_deadline():
+
+    return render_template('search_deadline.html')
+
+@app.route('/deadline/search', methods=['POST'])    #search for deadline with input
+def searching_deadline():
+
+    querytitle = request.form['dquery']
+    docs = db.deadline.find({
+        "title": querytitle
+        }
+    )
+
+    return render_template("deadline.html", docs = docs)
+
 @app.route('/account')
 def show_account():
     if not flask_login.current_user.is_authenticated:
@@ -330,6 +345,22 @@ def add_task():
     }
     db.todo.insert_one(newdoc)
     return redirect(url_for('show_todo'))
+
+@app.route('/todo/search')   # search for task
+def search_task():
+
+    return render_template('search_todo.html')
+
+@app.route('/todo/search', methods=['POST'])    #search for task with input
+def searching_task():
+
+    querytitle = request.form['tquery']
+    docs = db.todo.find({
+        "title": querytitle
+        }
+    )
+
+    return render_template("todo.html", docs = docs)
 
 # run the app
 if __name__ == "__main__":
