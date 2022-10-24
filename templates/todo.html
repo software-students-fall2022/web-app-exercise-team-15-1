@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+
+<h2>To-do List</h2>
+<section class="add-edit">
+    <a href="{{ url_for('edit_todo')}}">  
+        <div class="button2"> Edit  </div>
+    </a>
+    <a href="{{ url_for('add_task')}}">  
+        <div class="button2"> Add  </div>
+    </a>
+
+</section>
+<section class="todoDisplay">
+    {% for doc in docs %}
+    <article class = "task">
+        <a href="{{ url_for('complete_task', mongoid=doc._id)}}">
+            <div class="checkbox-round circle{{doc.completed}}"> </div>
+        </a>        
+            <article class="content2">
+                <p>
+                    <span class="title2  title{{doc.completed}}"> {{doc.title}} </span><br>
+                    <span class="desc descritpion{{doc.completed}}"> Description: {{doc.description}} </span><br>
+                    <span class="priority title{{doc.completed}}"> Priority level: {{doc.priority}} </span>
+                </p>
+            </article>
+    </article>
+    {%endfor%}
+</section>  
+
+{% endblock %}

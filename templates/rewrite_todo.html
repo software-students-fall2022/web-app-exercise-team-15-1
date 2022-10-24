@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h2>Editing: {{doc.title}} Task</h2>
+
+<form method="POST" action="{{ url_for('rewrite_task', mongoid=doc._id)}}">
+    <div class="input-task">
+        <div class="each-input">
+        <p>Task Name</p>
+        <input type="text" id="ttitle" name="ttitle" value="{{doc.title}}" />
+         </div>
+
+         <div class="each-input">
+        <p>Assigned Task Priority Level</p>
+        <select name="tPriority" id="tPriority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+    </div>
+    <div class = "input-task">
+        <div class="each-input">
+            <p>Task Description</p>
+            <input type="text" id="tdesc" name="tdesc" value="{{doc.description}}"/>
+            </div>
+
+
+    </div>
+
+    <div class = "input-task">
+        <div class="each-input">
+            <p>Task Label</p>
+            <input type="text" id="tlabel" name="tlabel" value="{{doc.label}}"/>
+            </div>
+
+    </div>
+    </div>
+
+    <section class="add-edit">
+        <a href="{{ url_for('edit_todo')}}">  
+            <div class="button"> Cancel  </div>
+        </a>
+        <div class="button">
+            <input type="submit" name="post-btn" value="Save" />
+        </div>
+    </section>
+</form>  
+
+{% endblock %}
