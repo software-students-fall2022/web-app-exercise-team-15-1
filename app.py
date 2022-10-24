@@ -193,6 +193,22 @@ def add_task():
     db.todo.insert_one(newdoc)
     return redirect(url_for('show_todo'))
 
+@app.route('/todo/search')   # search for task
+def search_task():
+
+    return render_template('search_todo.html')
+
+@app.route('/todo/search', methods=['POST'])    #search for task with input
+def searching_task():
+
+    querytitle = request.form['tquery']
+    docs = db.todo.find({
+        "title": querytitle
+        }
+    )
+
+    return render_template("todo.html", docs = docs)
+
 # run the app
 if __name__ == "__main__":
     #import logging

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h2>Search for Task Name</h2>
+
+<form method="POST" action="{{ url_for('search_task')}}">
+    <div class="input-task">
+        <div class="each-input">
+            <p>Task Name Query</p>
+            <input type="text" id="tquery" name="tquery" />
+        </div>
+    </div>
+
+    <section class="search">
+    <a href="{{ url_for('show_todo')}}">
+        <div class="button"> Cancel </div>
+    </a>
+        <div class="button">
+            <input type="submit" name="search-btn" value="Search" />
+        </div>
+    </section>
+</form>
+
+{% endblock %}
