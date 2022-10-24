@@ -7,8 +7,11 @@ A little exercise to build a web application following an agile development proc
 ## Team Members of Team 15
 
 Victoria Zhang [Github](https://github.com/Ruixi-Zhang)
+
 Leah Durrett [Github](https://github.com/howtofly-lab)
+
 Brandon Chao [Github](https://github.com/Sciao)
+
 Lucy Kocharian [Github](https://github.com/Lkochar19)
 
 ## Product vision statement
@@ -17,15 +20,18 @@ To help users keep track of deadlines and the tasks they wish to complete.
 ## User stories
 
 Link to User Stories on Project Repository Issue Page:
+
 [Issues](https://github.com/software-students-fall2022/web-app-exercise-team-15-1/issues?q=)
 
-## Task boards
+## Task Boards
 
-Link to Task Boards for Sprints 1 and 2
+Link to Task Boards for Sprints 1 and 2:
+
 [Projects](https://github.com/software-students-fall2022/web-app-exercise-team-15-1/projects?query=is%3Aopen)
 
-## Running our app locally - Commands for mac
-- note: before you run the command, supply the <password> in .env with user password
+
+## Running our app locally - Commands for macOS
+- note: before you run the command, supply the password in .env with user password 
 
 - python3 -m venv .venv
 - source .venv/bin/activate
@@ -33,14 +39,17 @@ Link to Task Boards for Sprints 1 and 2
 - export FLASK_APP=app.py
 - export FLASK_ENV=development
 - python3 -m flask run --host=0.0.0.0 --port=10000
-- Go to [http://0.0.0.0:10000/deadline] MAY CHANGE IF HOMEPAGE AVALIABLE
+- Go to http://0.0.0.0:10000/deadline
 
-### .env file 
+### .env File Contents
 
-MONGO_DBNAME=todo_list
-MONGO_URI= FILL IN LATER
-FLASK_APP=app.py
-FLASK_ENV=development
+>MONGO_DBNAME=todo_list
+
+>MONGO_URI= "mongodb+srv://rz1424:rz1424rz1424@first-cluster.41gjorr.mongodb.net/test"
+
+>FLASK_APP=app.py
+
+>FLASK_ENV=development
 GITHUB_SECRET=your_github_secret
 GITHUB_REPO=https://github.com/your-repository-url
 
