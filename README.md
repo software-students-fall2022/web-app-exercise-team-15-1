@@ -50,8 +50,8 @@ Link to Task Boards for Sprints 1 and 2:
 >FLASK_APP=app.py
 
 >FLASK_ENV=development
-GITHUB_SECRET=your_github_secret
-GITHUB_REPO=https://github.com/your-repository-url
+>GITHUB_SECRET=your_github_secret
+>GITHUB_REPO=https://github.com/your-repository-url
 
 Figma Design Link here: https://www.figma.com/file/4a1U4bGAHSfHgR5emHC6ZC/Deadline?node-id=0%3A1
 
